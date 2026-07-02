@@ -1,0 +1,86 @@
+package com.example.emptyactivity;
+
+import android.content.Intent; // ADD THIS
+import android.widget.EditText; // ADD THIS
+import android.os.Bundle;
+import android.widget.Button;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        EditText editText = findViewById(R.id.sendmessage);
+        Button button = findViewById(R.id.button);
+
+        button.setOnClickListener(v -> {
+            String message = editText.getText().toString();
+            Intent intent = new Intent(MainActivity.this, Screen2.class);
+            intent.putExtra("msg_key", message);
+            startActivity(intent);
+        });
+    }
+}
+
+
+public class Screen2 extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_screen2);
+
+        // Retrieve data from Intent
+        String receivedMessage = getIntent().getStringExtra("msg_key");
+        TextView textView = findViewById(R.id.showmessage);
+        textView.setText(receivedMessage);
+    }
+}
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Message Received:"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/showmessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp" />
+
+</LinearLayout>
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Message:" />
+
+    <EditText
+        android:id="@+id/sendmessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Type something here" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit" />
+
+</LinearLayout>
