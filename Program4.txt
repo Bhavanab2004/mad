@@ -1,0 +1,60 @@
+<html lang="en">
+    <head>
+        <title>Login PWA</title>
+
+        <script src="log.js"></script>
+        <link rel="manifest" href="manifest.json">
+        <script>
+            if("serviceWorker" in navigator){
+    window.addEventListener("load",()=>{
+        navigator.serviceWorker.register("Serviceworker.js")
+        .then(registration=>{
+            console.log("Service Worker registered with scope:", registration.scope);
+        })
+        .catch(error=>{
+            console.log("Service Worker registration failed:", error);
+        });
+    });
+}
+        </script>
+    </head>
+
+    <body>
+
+        <p>Username: <input type="text" id="username"></p>
+        <p>Password: <input type="password" id="password"></p>
+        <p><input type="submit" value="check" onclick="verify()"></p>
+        <img src="Screenshot 2025-05-14 042359.png" alt="icon" width="100" height="100">
+    </body>
+</html>
+
+localStorage.setItem("username", "rvce");
+localStorage.setItem("password", "rvce");
+
+function verify() {
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+
+    let un = localStorage.getItem("username");
+    let pas = localStorage.getItem("password");
+
+    if (username === un && password === pas) {
+        alert("Authentication done");
+    } else {
+        alert("Authentication failure");
+    }
+}
+
+{
+  "name": "my_first_manifest",
+  "start_url": "my.html",
+  "description": "A simple application for manifest",
+  "icons": [
+    {
+      "src": "Screenshot 2025-05-14 042359.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
+
