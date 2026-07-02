@@ -1,0 +1,71 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  int counter = 0;
+  List<int> history = [];
+
+  void increment() {
+    setState(() {
+      counter++;
+      history.add(counter);
+    });
+  }
+
+  void decrement() {
+    setState(() {
+      counter--;
+      history.add(counter);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "$counter",
+                style: TextStyle(fontSize: 40),
+              ),
+
+
+              Text(
+                history.toString(),
+                style: TextStyle(fontSize: 20),
+                textAlign: TextAlign.center,
+              ),
+
+              SizedBox(height: 20),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: decrement,
+                    child: Text("-"),
+                  ),
+                  ElevatedButton(
+                    onPressed: increment,
+                    child: Text("+"),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
