@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link rel="manifest" href="./manifest.json">
+
+<title>Program 5</title>
+</head>
+
+<body>
+
+<script src="start.js"></script>
+
+<h2>Display of Images</h2>
+
+<p>Image 1 -> <img src="icons\logo.jpg" width="100" height="100"></p>
+<p>Image 2 -> <img src="Screenshot 2025-05-14 042359.png" width="100" height="100"></p>
+</body>
+</html>
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register("./sw.js")
+        .then((reg) => console.log("Registered", reg))
+        .catch((err) => console.log("Error", err));
+} else {
+    console.log('No service worker support in this browser');
+}
+
+var mycache = "mycache";
+var assests = [
+    "/", 	
+    "/index.html",
+    "icons/logo.jpg",
+    "Screenshot 2025-05-14 042359.png",
+    "start.js",
+    "/sw.js"
+];
+
+self.addEventListener('install', _event => {
+
+    console.log('inside the install', _event);
+    caches.open(mycache)
+    .then(cache => {
+        cache.addAll(assests);
+    });
+});
+
+self.addEventListener('activate', _event => {
+    console.log('inside the activate', _event);
+
+});
+
+self.addEventListener('fetch', async (event) => {
+    event.respondWith(
+        caches.match(event.request)
+            .then(response => {
+                return response || fetch(event.request);
+
+            })
+    );
+
+    console.log('inside the fetched', event);
+});
+
+{
+  "name": "Program_5",
+  "short_name": "PWA Demo",
+  "start_url": "./index.html",
+  "display": "standalone",
+
+  "icons": [
+    {
+      "src": "icons/logo.jpg",
+      "sizes": "144x144",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+     {
+      "src": "Screenshot 2025-05-14 042359.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
