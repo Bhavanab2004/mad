@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title> PWA </title>
+        <script src="sw.js" >  </script>
+    </head>
+<body>
+<h1> PWA</h1>
+<p> R V College of Engineering</p>
+<img src="icons\logo.jpg" alt="logo" width="200" height="200">
+</body>
+</html>
+
+
+self.addEventListener('load', (event) => {
+    console.log("Service Worker Loaded");
+});
+
+self.addEventListener('install', (event) => {
+    console.log("Service Worker Installed");
+});
+self.addEventListener('activate', (event) => {
+    console.log("Service Worker Activated");
+});
+self.addEventListener('fetch', (event) => {
+    console.log('Fetching', event.request.url);
+    console.log("Service Worker Fetch");
+});
+
+if("serviceWorker" in navigator){
+    window.addEventListener("load",()=>{
+        navigator.serviceWorker.register("Serviceworker.js")
+        .then(registration=>{
+            console.log("Service Worker registered with scope:", registration.scope);
+        })
+        .catch(error=>{
+            console.log("Service Worker registration failed:", error);
+        });
+    });
+}
