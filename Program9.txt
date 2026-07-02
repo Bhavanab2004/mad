@@ -1,0 +1,52 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  String message = "Double Tap or Swipe";
+
+  void showDoubleTap() {
+    setState(() {
+      message = "Double Tap";
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: GestureDetector(
+            onDoubleTap: showDoubleTap,
+            onPanUpdate: (details) {
+              setState(() {
+                message =
+                    details.delta.dx > 0 ? "Swipe Right" : "Swipe Left";
+              });
+            },
+            child: Container(
+              width: 200,
+              height: 200,
+              color: Colors.blue,
+              alignment: Alignment.center,
+              child: Text(
+                message,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
