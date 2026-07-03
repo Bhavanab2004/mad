@@ -1,0 +1,138 @@
+Make 4 files
+1. stocks.json
+2. manifest.json
+3. index.html
+4. service-worker.js
+
+#stocks.json
+
+[
+  {
+    "symbol": "NVDA",
+    "name": "NVIDIA Corporation",
+    "price": 485.20
+  },
+  {
+    "symbol": "GOOGL",
+    "name": "Alphabet Inc.",
+    "price": 140.12
+  },
+  {
+    "symbol": "MSFT",
+    "name": "Microsoft Corp.",
+    "price": 374.58
+  }
+]
+
+
+
+#manifest.json
+
+{
+  "name": "Stock Display PWA",
+  "short_name": "Stocks",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#333333",
+  "icons": [
+    {
+      "src": "./icon.png",
+      "sizes": "any",
+      "type": "image/png"
+    }
+  ]
+}
+
+
+#index.html
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stock Display PWA</title>
+  <link rel="manifest" href="./manifest.json">
+</head>
+
+<body>
+  <h1>Stock Display PWA</h1>
+
+  <div id="stock-container">
+    <p>Loading stock data...</p>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator)
+      navigator.serviceWorker.register('/service-worker.js')
+
+    fetch('stocks.json')
+      .then((r) => { return r.json(); })
+      .then((s) => {
+        let table =
+          `<table>
+          <tr>
+          <th>Company</th>
+          <th>Price</th>
+          <th>Symbol</th>
+          </tr> `;
+
+        for (let item of s) {
+          table += `<tr>
+          <td>${item.name}</td>
+          <td>${item.price}</td>
+          <td>${item.symbol}</td>
+          </tr> `;
+        }
+
+        table += `</table>`;
+        document.getElementById('stock-container').innerHTML = table;
+
+      })
+  </script>
+</body>
+
+</html>
+
+
+#servicd-worker.js
+
+const CACHE = 'prgm-6';
+const ASSETS = [
+  './',
+  './index.html',
+  './styles.css',
+  './app.js',
+  './stocks.json',
+  './manifest.json',
+  './icon.svg'
+];
+
+self.addEventListener('install', e =>
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)))
+);
+
+self.addEventListener('activate', e =>
+  e.waitUntil(caches.keys().then(keys =>
+    Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+  ))
+);
+
+self.addEventListener('fetch', e =>
+  e.respondWith(
+    fetch(e.request)
+      .then(res => {
+        caches.open(CACHE).then(c => c.put(e.request, res.clone()));
+        return res;
+      })
+      .catch(() => caches.match(e.request))
+  )
+);
+
+
+
+23.
+ 
+
